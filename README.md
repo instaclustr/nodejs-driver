@@ -242,6 +242,32 @@ client.on('log', (level, loggerName, message, furtherInfo) => {
 The `level` being passed to the listener can be `verbose`, `info`, `warning` or `error`. Visit the [logging
 documentation][doc-logging] for more information. 
 
+## WebSockets
+
+You can use websocket as transport. But Cassandra doesn't support this protocol 
+so some proxy should be deployed in front of Cassandra, which can handle this transport protocol.
+
+```javascript
+ const client = new cassandra.Client({
+ transport: 'WebSocket',
+ contactPoints: [
+  // some proxies that support websocket transport
+  '127.0.0.1:9043',
+  'localhost:9044'
+ ],
+ webSocketOptions: {
+  // some client websocket options
+  protocolVersion: 13,
+  ...
+ }
+});
+```
+
+You can configure your websocket client with `webSocketOptions`.
+To properly configure it follow [websocket/ws doc][ws-doc].
+
+You also can use websockets over SSL by passing `transport: 'SecureWebSocket'`.
+
 ## Compatibility
 
 - Apache Cassandra versions 2.1 and above.
@@ -292,3 +318,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 [cql-udt]: https://cassandra.apache.org/doc/latest/cql/types.html#udts
 [dse]: https://www.datastax.com/products/datastax-enterprise
 [astra]: https://www.datastax.com/products/datastax-astra
+[ws-doc]: https://github.com/websockets/ws/blob/master/doc/ws.md#new-websocketaddress-protocols-options
